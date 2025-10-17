@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mern-js-web-local
+  namespace: mern-js-local
+  labels:
+    app: mern-js-web-local
+
+# manifest specs (replicas)
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mern-js-web-local
+
+  # templates
+  template:
+    metadata:
+      labels:
+        app: mern-js-web-local
+
+    # template specs
+    spec:
+      containers:
+        - name: mern-js-web-local
+          image: mern-js-web:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
+
+          # envs
+          envFrom:
+            #   - configMapRef:
+            #       name: mern-js-web-local-cm
+            - secretRef:
+                name: mern-js-web-local-secret
+          env:
+            - name: NODE_ENV
+              value: "production"
+            # - name: API_BASE_URL
+            #   value: "http://mern-js-backend-local.mern-js-local.svc.cluster.local:9000"
+
+          # probes
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mern-js-web-local
+  namespace: mern-js-local
+spec:
+  selector:
+    app: mern-js-web-local
+  ports:
+    - port: 4000
+      targetPort: 4000
+  type: NodePort

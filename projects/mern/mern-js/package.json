@@ -1,0 +1,30 @@
+{
+  "name": "mern-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docker-dev:up": "docker compose -f docker-compose-dev.yaml up",
+    "docker-dev:down": "docker compose -f docker-compose-dev.yaml down --volumes",
+    "docker-prod:up": "docker compose -f docker-compose-prod.yaml up --build -d",
+    "docker-prod:down": "docker compose -f docker-compose-prod.yaml down",
+    "win:set-sh": "npm config set script-shell 'C:\\Program Files\\Git\\bin\\bash.exe' && npm config get script-shell",
+    "m-api:load": "minikube image load ${image:-mern-js-api}",
+    "m-web:load": "minikube image load ${image:-mern-js-web}",
+    "mloc-api:svc": "bash scripts/minikube/m-service.sh -- n=mern-js-api ns=mern-js ae=local",
+    "mloc-web:svc": "bash scripts/minikube/m-service.sh -- n=mern-js-web ns=mern-js ae=local",
+    "kloc-api:scale": "bash scripts/k8s/k-deploy.sh -- n=mern-js-api ns=mern-js sn=2 ae=local",
+    "kloc-web:scale": "bash scripts/k8s/k-deploy.sh -- n=mern-js-web ns=mern-js sn=2 ae=local",
+    "kloc-api:env": "bash scripts/k8s/k-env.sh -- n=mern-js-api ns=mern-js c=./backend ae=local",
+    "kloc-web:env": "bash scripts/k8s/k-env.sh -- n=mern-js-web ns=mern-js c=./frontend ae=local",
+    "kloc-init:config": "bash scripts/k8s/k-config.sh -- f=k8s/local/prod/init",
+    "kloc:config": "npm run kloc-init:config && bash scripts/k8s/k-config.sh -- f=k8s/local/prod/app",
+    "kloc-api:rollout": "bash scripts/k8s/k-deploy.sh -- rt=restart n=mern-js-api ns=mern-js ae=local",
+    "kloc-web:rollout": "bash scripts/k8s/k-deploy.sh -- rt=restart n=mern-js-web ns=mern-js ae=local",
+    "kloc:res": "bash scripts/k8s/k-resource.sh -- gn=mern-js ae=local"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

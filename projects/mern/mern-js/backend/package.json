@@ -1,0 +1,45 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node dist/index.cjs",
+    "esbuild": "esbuild index.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist/index.cjs",
+    "build:reset": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run build:reset && npm run esbuild",
+    "docker-dev:up": "docker compose -f docker/docker-compose-dev.yaml up",
+    "docker-dev:down": "docker compose -f docker/docker-compose-dev.yaml down --volumes",
+    "docker-prod:up": "docker compose -f docker/docker-compose-prod.yaml up --build -d",
+    "docker-prod:down": "docker compose -f docker/docker-compose-prod.yaml down",
+    "win:set-sh": "npm config set script-shell 'C:\\Program Files\\Git\\bin\\bash.exe' && npm config get script-shell",
+    "m:load": "minikube image load ${image:-mern-js-backend}",
+    "mloc:svc": "bash scripts/minikube/m-service.sh -- gn=mern-js-backend ae=local",
+    "m:svc": "bash scripts/minikube/m-service.sh -- gn=mern-js-backend",
+    "kloc:scale": "bash scripts/k8s/k-deploy.sh -- gn=mern-js-backend-local sn=2",
+    "k:scale": "bash scripts/k8s/k-deploy.sh -- gn=mern-js-backend sn=2",
+    "kloc:env": "bash scripts/k8s/k-env.sh -- gn=mern-js-backend ae=local",
+    "k:env": "bash scripts/k8s/k-env.sh -- gn=mern-js-backend",
+    "kloc:config": "bash scripts/k8s/k-config.sh -- f=k8s/local/prod",
+    "k:config": "bash scripts/k8s/k-config.sh -- f=k8s/remote/prod",
+    "kloc:rollout": "bash scripts/k8s/k-deploy.sh -- rt=restart gn=mern-js-backend ae=local",
+    "k:rollout": "bash scripts/k8s/k-deploy.sh -- rt=restart gn=mern-js-backend",
+    "kloc:res": "bash scripts/k8s/k-resource.sh -- gn=mern-js-backend ae=local",
+    "k:res": "bash scripts/k8s/k-resource.sh -- gn=mern-js-backend"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.25.11"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1",
+    "nodemon": "^3.1.10"
+  }
+}

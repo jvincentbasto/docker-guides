@@ -1,0 +1,19 @@
+name: mern-js-backend
+services:
+  api:
+    image: mern-js-backend
+    container_name: mern-js-backend-api
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.prod
+    ports:
+      - "9000:9000"
+    env_file:
+      - ../.env
+    command: npm start
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

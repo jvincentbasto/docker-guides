@@ -1,0 +1,48 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 3000",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "start": "node server.js",
+    "docker-dev:up": "docker compose -f docker/docker-compose-dev.yaml up",
+    "docker-dev:down": "docker compose -f docker/docker-compose-dev.yaml down --volumes",
+    "docker-prod:up": "docker compose -f docker/docker-compose-prod.yaml up --build -d",
+    "docker-prod:down": "docker compose -f docker/docker-compose-prod.yaml down",
+    "win:set-sh": "npm config set script-shell 'C:\\Program Files\\Git\\bin\\bash.exe' && npm config get script-shell",
+    "m:load": "minikube image load ${image:-mern-js-frontend}",
+    "mloc:svc": "bash scripts/minikube/m-service.sh -- gn=mern-js-frontend ae=local",
+    "m:svc": "bash scripts/minikube/m-service.sh -- gn=mern-js-frontend",
+    "kloc:scale": "bash scripts/k8s/k-deploy.sh -- gn=mern-js-frontend sn=2 ae=local",
+    "k:scale": "bash scripts/k8s/k-deploy.sh -- gn=mern-js-frontend sn=2",
+    "kloc:env": "bash scripts/k8s/k-env.sh -- gn=mern-js-frontend ae=local",
+    "k:env": "bash scripts/k8s/k-env.sh -- gn=mern-js-frontend",
+    "kloc:config": "bash scripts/k8s/k-config.sh -- f=k8s/local/prod",
+    "k:config": "bash scripts/k8s/k-config.sh -- f=k8s/remote/prod",
+    "kloc:rollout": "bash scripts/k8s/k-deploy.sh -- rt=restart gn=mern-js-frontend ae=local",
+    "k:rollout": "bash scripts/k8s/k-deploy.sh -- rt=restart gn=mern-js-frontend",
+    "kloc:res": "bash scripts/k8s/k-resource.sh -- gn=mern-js-frontend ae=local",
+    "k:res": "bash scripts/k8s/k-resource.sh -- gn=mern-js-frontend"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "axios": "^1.12.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.38.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "vite": "^7.1.10"
+  }
+}

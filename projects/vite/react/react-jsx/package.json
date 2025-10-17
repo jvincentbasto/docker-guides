@@ -1,0 +1,36 @@
+{
+  "name": "react-jsx",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "docker-dev:build": "docker build -f Dockerfile.dev -t react-jsx-dev .",
+    "docker-dev:run": "docker run --rm -p 5173:5173 -v '$(pwd):/app' -v /app/node_modules react-jsx-dev",
+    "docker-dev:run-win": "docker run --rm -p 5173:5173 -v %cd%:/app -v /app/node_modules react-jsx-dev",
+    "docker-dev:up": "docker compose -f docker-compose-dev.yaml up",
+    "docker-dev:down": "docker compose -f docker-compose-dev.yaml down --volumes",
+    "docker-prod:build": "docker build -f Dockerfile.prod -t react-jsx .",
+    "docker-prod:run": "docker run --init --rm -it -p 4173:4173 react-jsx",
+    "docker-prod:up": "docker compose -f docker-compose-prod.yaml up --build -d",
+    "docker-prod:down": "docker compose -f docker-compose-prod.yaml down"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.37.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "vite": "^7.1.10"
+  }
+}

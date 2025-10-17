@@ -1,0 +1,18 @@
+name: next-js
+services:
+  web:
+    image: next-js
+    container_name: next-js-web
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/api"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

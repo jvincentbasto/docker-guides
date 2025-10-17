@@ -1,0 +1,147 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mern-js-backend
+
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mern-js-backend
+  namespace: mern-js-backend
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mern-js-backend
+  namespace: mern-js-backend
+spec:
+  limits:
+    - default:
+        cpu: "500m"
+        memory: "512Mi"
+      defaultRequest:
+        cpu: "100m"
+        memory: "128Mi"
+      type: Container
+
+---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mern-js-backend
+#   namespace: mern-js-backend
+# type: Opaque
+# stringData:
+#   # MONGO_URI: "mongodb://localhost:27017/testdb"
+#   # JWT_SECRET: "some-secret-key"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mern-js-backend
+  namespace: mern-js-backend
+  labels:
+    app: mern-js-backend
+
+# manifest specs (replicas)
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mern-js-backend
+
+  # templates
+  template:
+    metadata:
+      labels:
+        app: mern-js-backend
+
+    # template specs
+    spec:
+      containers:
+        - name: mern-js-backend
+          image: registry/mern-js-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+
+          # envs
+          envFrom:
+            #   - configMapRef:
+            #       name: mern-js-backend-cm
+            - secretRef:
+                name: mern-js-backend-secret
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+          # resources
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          # probes
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mern-js-backend
+  namespace: mern-js-backend
+  labels:
+    app: mern-js-backend
+
+# manifest specs
+spec:
+  selector:
+    app: mern-js-backend
+
+  # ports
+  ports:
+    - protocol: TCP
+      port: 9000 # Service port
+      targetPort: 9000 # Container port
+
+  # change to LoadBalancer if running in cloud
+  type: NodePort
+
+---
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: deny-all
+#   namespace: mern-js-backend
+# spec:
+#   podSelector: {}
+#   policyTypes:
+#     - Ingress
+#     - Egress

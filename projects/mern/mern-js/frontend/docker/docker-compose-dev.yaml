@@ -1,0 +1,21 @@
+name: mern-js-frontend-dev
+services:
+  web:
+    image: mern-js-frontend-dev
+    container_name: mern-js-frontend-dev-web
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.dev
+      # args:
+      #   CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING}
+    ports:
+      # - "5173:5173"
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      # - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING}
+    env_file:
+      - ../.env.local
+    volumes:
+      - ../:/app
+      - /app/node_modules

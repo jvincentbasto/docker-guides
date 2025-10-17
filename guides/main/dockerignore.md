@@ -1,0 +1,42 @@
+# 🐳 Docker Ignore
+
+```dockerfile
+# Node / build outputs
+node_modules
+build
+dist
+.next
+.cache
+
+# Logs
+npm-debug.log
+
+# Environment & secrets
+.env
+secrets.dev.yaml
+values.dev.yaml
+
+# Git
+.git
+.gitignore
+
+# IDE / editor files
+.vscode
+.vs
+.project
+.settings
+.classpath
+*.dbmdl
+*.*proj.user
+*.jfm
+obj
+charts
+
+# Docker
+docker-compose*
+compose*
+
+# Misc
+LICENSE
+README.md
+```

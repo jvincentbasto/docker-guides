@@ -1,0 +1,29 @@
+# stage - build
+FROM node:22-alpine AS build
+
+WORKDIR /app
+COPY package*.json ./
+# faster + reproducible installs
+RUN npm ci
+
+COPY . .
+# runs `vite build` → generates /dist
+RUN npm run build  
+
+# stage - prod
+FROM node:22-alpine AS prod
+
+WORKDIR /app
+# Copy only built output and necessary files
+COPY --from=build /app/dist ./dist
+COPY package*.json ./
+COPY server.js ./
+RUN npm ci --omit=dev
+
+# ENV PORT=4000
+# EXPOSE 4173
+# CMD ["node", "server.js"]
+
+ENV PORT=4000
+EXPOSE 4000
+CMD ["npm", "start"]

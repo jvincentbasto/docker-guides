@@ -1,0 +1,10 @@
+name: react-jsx
+services:
+  web:
+    image: react-jsx
+    container_name: react-jsx-web
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "4173:4173"

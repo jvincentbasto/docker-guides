@@ -1,0 +1,17 @@
+name: mern-js
+services:
+  web:
+    extends:
+      service: web
+      file: ./frontend/docker/docker-compose-prod.yaml
+    depends_on:
+      - api
+    image: mern-js-web
+    container_name: mern-js-web
+
+  api:
+    extends:
+      service: api
+      file: ./backend/docker/docker-compose-prod.yaml
+    image: mern-js-api
+    container_name: mern-js-api
